@@ -65,9 +65,15 @@ TH1F *h8 = new TH1F("Isto8","Distribuzione angoli polari",10,0., 3.1416); //manc
           EventParticles[100 + k + 1].SetIndex("Kaone+");
         }
         EventParticles[j].Decay2Body(EventParticles[100 + k],
-                                     EventParticles[100 + k + 1]) k += 2;
+                                     EventParticles[100 + k + 1]);
+        k += 2;
       }
+      for (int m{0}; m<100+k; m++) {
+       h1->Fill( EventParticles[m].GetParticleType()) //probabilmente sbagliato
+      }
+      
     }
+  
   }
 
   /*
