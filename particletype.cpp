@@ -1,3 +1,4 @@
+
 #include "ParticleType.hpp"
 
 #include <iostream>
@@ -13,3 +14,5 @@ void ParticleType::print() {
   std::cout << "The mass is: " << fMass_ << '\n';
   std::cout << "The charge is: " << fCharge_ << '\n';
 }
+
+double ParticleType::GetWidth() const {return 0;}

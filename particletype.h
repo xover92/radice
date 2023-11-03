@@ -1,3 +1,4 @@
+
 #ifndef PARTICLETYPE_HPP
 #define PARTICLETYPE_HPP
 
@@ -13,5 +14,11 @@ class ParticleType {
   int GetCharge() const;
   const char* GetName() const;
   virtual void print();
-}
-  #endif
+  virtual double GetWidth() const;
+  /* print dichiarato virtual altrimenti nel ciclo for che stampa la
+  informazioni sulle particelle viene invocato il print della classe base anche
+  per le risonanze. !Controllare definizione metodo print per resonancetypr
+  */
+};
+
+#endif
