@@ -1,10 +1,10 @@
 
 #include <iostream>
+#include <vector>
 
 #include "Particle.hpp"
 #include "ParticleType.hpp"
 #include "ResonanceType.hpp"
-#include <vector>
 
 int main() {
   gRandom→SetSeed();
@@ -19,37 +19,52 @@ int main() {
 
   Particle EventParticles[120];
 
- for(int i{0}; i< 1E5; i++) {
-  int k = 0;
-  for(int j{0}; j < 100; j++) {
-    double theta = gRandom ->Uniform(0,TMath::Pi());
-    double phi = gRandom ->Uniform(0,2*TMath::Pi());
-    double impulse = gRandom-> Exp(1);
-    EventParticles[j].SetP(impulse*TMath::Sin(theta)*TMath::Cos(phi),impulse*TMath::Sin(theta)*TMath::sin(phi),impulse*TMath::Cos(theta));
-    double x=gRandom->Rndm();
-    if(x<0.4) {EventParticles[j].SetIndex("Pione+");};
-    else if(x<0.8) {EventParticles[j].SetIndex("Pione-");}
-    else if(x<0.85) {EventParticles[j].SetIndex("Kaone+");}
-    else if(x<0.90) {EventParticles[j].SetIndex("Kaone-");}
-    else if(x< 0.945) {EventParticles[j].SetIndex("Protone+");} //ricordiamoci di cambiare negli effettivi
-    else if(x< 0.99) {EventParticles[j].SetIndex("Protone+");}  //indici perchè questi sono tanti loop e pesano
-    else if {EventParticles[j].SetIndex("K*");}
+TH1F *h1 = new TH1F("Isto1","Tipi di particelle gnerate",7,0., 6.);
+TH1F *h2 = new TH1F("Isto2","Distribuzione angoli azimutali",10,0., 6.2832);
+TH1F *h3 = new TH1F("Isto3","Distribuzione angoli polari",10,0., 3.1416);
+TH1F *h4 = new TH1F("Isto4","Distribuzione impulso",,);
+  for (int i{0}; i < 1E5; i++) {
+    int k = 0;
+    for (int j{0}; j < 100; j++) {
+      double theta = gRandom->Uniform(0, TMath::Pi());
+      double phi = gRandom->Uniform(0, 2 * TMath::Pi());
+      double impulse = gRandom->Exp(1);
+      EventParticles[j].SetP(impulse * TMath::Sin(theta) * TMath::Cos(phi),
+                             impulse * TMath::Sin(theta) * TMath::sin(phi),
+                             impulse * TMath::Cos(theta));
+      double x = gRandom->Rndm();
+      if (x < 0.4) {
+        EventParticles[j].SetIndex("Pione+");
+      }; else if (x < 0.8) {
+        EventParticles[j].SetIndex("Pione-");
+      } else if (x < 0.85) {
+        EventParticles[j].SetIndex("Kaone+");
+      } else if (x < 0.90) {
+        EventParticles[j].SetIndex("Kaone-");
+      } else if (x < 0.945) {
+        EventParticles[j].SetIndex("Protone+");
+      }  // ricordiamoci di cambiare negli effettivi
+      else if (x < 0.99) {
+        EventParticles[j].SetIndex("Protone+");
+      }  // indici perchè questi sono tanti loop e pesano
+      else if {
+        EventParticles[j].SetIndex("K*");
+      }
 
-    if(EventParticles[j].GetParticleIndex() == FindParticle("K*")) {
-       double y=gRandom->Rndm();
-      if (y<0.5) {
-        EventParticles[100+k].SetIndex("Pione+");
-        EventParticles[100+k+1].SetIndex("Kaone-");
+      if (EventParticles[j].GetParticleIndex() == FindParticle("K*")) {
+        double y = gRandom->Rndm();
+        if (y < 0.5) {
+          EventParticles[100 + k].SetIndex("Pione+");
+          EventParticles[100 + k + 1].SetIndex("Kaone-");
+        } else {
+          EventParticles[100 + k].SetIndex("Pione-");
+          EventParticles[100 + k + 1].SetIndex("Kaone+");
+        }
+        EventParticles[j].Decay2Body(EventParticles[100 + k],
+                                     EventParticles[100 + k + 1]) k += 2;
       }
-      else {
-        EventParticles[100+k].SetIndex("Pione-");
-        EventParticles[100+k+1].SetIndex("Kaone+");
-      }
-      EventParticles[j].Decay2Body(EventParticles[100+k],EventParticles[100+k+1])
-      k+=2;
     }
   }
-}
 
   /*
   Particle::AddParticleType("Protone", 1, 2);
@@ -68,5 +83,3 @@ int main() {
   }
  (*array[1]).print();*/
 }
-
-
