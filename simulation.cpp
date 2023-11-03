@@ -22,7 +22,11 @@ int main() {
 TH1F *h1 = new TH1F("Isto1","Tipi di particelle gnerate",7,0., 6.);
 TH1F *h2 = new TH1F("Isto2","Distribuzione angoli azimutali",10,0., 6.2832);
 TH1F *h3 = new TH1F("Isto3","Distribuzione angoli polari",10,0., 3.1416);
-TH1F *h4 = new TH1F("Isto4","Distribuzione impulso",,);
+TH1F *h4 = new TH1F("Isto4","Distribuzione impulso",20,0.,5.);
+TH1F *h5 = new TH1F("Isto5","Impulso Trasverso",10,0.,5.);
+TH1F *h6 = new TH1F("Isto6","Distribuzione Energia", 20,0., 4.);
+TH1F *h7 = new TH1F("Isto7","Massa invariante gen.",20,0., 11.);
+TH1F *h8 = new TH1F("Isto8","Distribuzione angoli polari",10,0., 3.1416); //mancano i 5 difficili
   for (int i{0}; i < 1E5; i++) {
     int k = 0;
     for (int j{0}; j < 100; j++) {
