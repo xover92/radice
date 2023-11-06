@@ -7,7 +7,7 @@
 #include "ResonanceType.hpp"
 
 int main() {
-  gRandom→SetSeed();
+  gRandom->SetSeed();
 
   Particle::AddParticleType("Pione+", 0.13957, 1);
   Particle::AddParticleType("Pione-", 0.13957, -1);
@@ -22,7 +22,13 @@ int main() {
 TH1F *h1 = new TH1F("Isto1","Tipi di particelle gnerate",7,0., 6.);
 TH1F *h2 = new TH1F("Isto2","Distribuzione angoli azimutali",10,0., 6.2832);
 TH1F *h3 = new TH1F("Isto3","Distribuzione angoli polari",10,0., 3.1416);
-TH1F *h4 = new TH1F("Isto4","Distribuzione impulso",,);
+TH1F *h4 = new TH1F("Isto4","Distribuzione impulso",20,0.,5.);
+TH1F *h5 = new TH1F("Isto5","Impulso Trasverso",10,0.,5.);
+TH1F *h6 = new TH1F("Isto6","Distribuzione Energia", 20,0., 4.);
+TH1F *h7 = new TH1F("Isto7","Massa invariante gen.",20,0., 11.);
+//TH1F *h8 = new TH1F("Isto8","Distribuzione angoli polari",10,0., 3.1416);//per dopo
+
+
   for (int i{0}; i < 1E5; i++) {
     int k = 0;
     for (int j{0}; j < 100; j++) {
@@ -30,12 +36,12 @@ TH1F *h4 = new TH1F("Isto4","Distribuzione impulso",,);
       double phi = gRandom->Uniform(0, 2 * TMath::Pi());
       double impulse = gRandom->Exp(1);
       EventParticles[j].SetP(impulse * TMath::Sin(theta) * TMath::Cos(phi),
-                             impulse * TMath::Sin(theta) * TMath::sin(phi),
+                             impulse * TMath::Sin(theta) * TMath::Sin(phi),
                              impulse * TMath::Cos(theta));
       double x = gRandom->Rndm();
       if (x < 0.4) {
         EventParticles[j].SetIndex("Pione+");
-      }; else if (x < 0.8) {
+      } else if (x < 0.8) {
         EventParticles[j].SetIndex("Pione-");
       } else if (x < 0.85) {
         EventParticles[j].SetIndex("Kaone+");
@@ -47,7 +53,7 @@ TH1F *h4 = new TH1F("Isto4","Distribuzione impulso",,);
       else if (x < 0.99) {
         EventParticles[j].SetIndex("Protone+");
       }  // indici perchè questi sono tanti loop e pesano
-      else if {
+      else {
         EventParticles[j].SetIndex("K*");
       }
 
@@ -63,8 +69,20 @@ TH1F *h4 = new TH1F("Isto4","Distribuzione impulso",,);
         EventParticles[j].Decay2Body(EventParticles[100 + k],
                                      EventParticles[100 + k + 1]) k += 2;
       }
+      for (int m{0}; m<100+k; m++) {
+       h1->Fill( EventParticles[m].GetParticleType());
+       h3->Fill( EventParticles[m]->theta);
+       h2->Fill( EventParticles[m]->phi);
+       h4->Fill( sqrt(EventParticles[m].GetPx()*EventParticles[m].GetPx()+EventParticles[m].GetPy()*EventParticles[m].GetPy()+EventParticles[m]GetPz()*EventParticles[m].GetPz()));
+       h5->Fill(sqrt(EventParticles[m].GetPx()*EventParticles[m].GetPx()+EventParticles[m].GetPy()*EventParticles[m].GetPy()));
+       h6->Fill(EventParticles[m].TotEnergy());
+       h7->Fill(EventParticles[m].InvMass());
+
+      }
     }
+
   }
+
 
   /*
   Particle::AddParticleType("Protone", 1, 2);
