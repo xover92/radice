@@ -19,15 +19,17 @@ int main() {
 
   Particle EventParticles[120];
 
-TH1F *h1 = new TH1F("Isto1","Tipi di particelle gnerate",7,0., 6.);
-TH1F *h2 = new TH1F("Isto2","Distribuzione angoli azimutali",10,0., 6.2832);
-TH1F *h3 = new TH1F("Isto3","Distribuzione angoli polari",10,0., 3.1416);
-TH1F *h4 = new TH1F("Isto4","Distribuzione impulso",20,0.,5.);
-TH1F *h5 = new TH1F("Isto5","Impulso Trasverso",10,0.,5.);
-TH1F *h6 = new TH1F("Isto6","Distribuzione Energia", 20,0., 4.);
-TH1F *h7 = new TH1F("Isto7","Massa invariante gen.",20,0., 11.);
-//TH1F *h8 = new TH1F("Isto8","Distribuzione angoli polari",10,0., 3.1416);//per dopo
+  TH1F *h1 = new TH1F("Isto1", "Tipi di particelle gnerate", 7, 0., 6.);
+  TH1F *h2 =
+      new TH1F("Isto2", "Distribuzione angoli azimutali", 10, 0., 6.2832);
+  TH1F *h3 = new TH1F("Isto3", "Distribuzione angoli polari", 10, 0., 3.1416);
+  TH1F *h4 = new TH1F("Isto4", "Distribuzione impulso", 20, 0., 5.);
+  TH1F *h5 = new TH1F("Isto5", "Impulso Trasverso", 10, 0., 5.);
+  TH1F *h6 = new TH1F("Isto6", "Distribuzione Energia", 20, 0., 4.);
+  TH1F *h7 = new TH1F("Isto7", "Massa invariante gen.", 20, 0., 11.);
 
+  // TH1F *h8 = new TH1F("Isto8","Distribuzione angoli
+  // polari",10,0., 3.1416);//per dopo
 
   for (int i{0}; i < 1E5; i++) {
     int k = 0;
@@ -35,9 +37,18 @@ TH1F *h7 = new TH1F("Isto7","Massa invariante gen.",20,0., 11.);
       double theta = gRandom->Uniform(0, TMath::Pi());
       double phi = gRandom->Uniform(0, 2 * TMath::Pi());
       double impulse = gRandom->Exp(1);
+      h3->Fill(theta);
+      h2->Fill(phi);
       EventParticles[j].SetP(impulse * TMath::Sin(theta) * TMath::Cos(phi),
                              impulse * TMath::Sin(theta) * TMath::Sin(phi),
                              impulse * TMath::Cos(theta));
+      h4->Fill(sqrt(EventParticles[j].GetPx() * EventParticles[j].GetPx() +
+                    EventParticles[j].GetPy() * EventParticles[j].GetPy() +
+                    EventParticles[j].GetPz() * EventParticles[j].GetPz()));
+      h5->Fill(sqrt(EventParticles[j].GetPx() * EventParticles[j].GetPx() +
+                    EventParticles[j].GetPy() * EventParticles[j].GetPy()));
+      
+
       double x = gRandom->Rndm();
       if (x < 0.4) {
         EventParticles[j].SetIndex("Pione+");
@@ -66,23 +77,28 @@ TH1F *h7 = new TH1F("Isto7","Massa invariante gen.",20,0., 11.);
           EventParticles[100 + k].SetIndex("Pione-");
           EventParticles[100 + k + 1].SetIndex("Kaone+");
         }
-        EventParticles[j].Decay2Body(EventParticles[100 + k],
-                                     EventParticles[100 + k + 1]) k += 2;
+        EventParticles[j].Decay2body(EventParticles[100 + k],
+                                     EventParticles[100 + k + 1]);
+        k += 2;
       }
-      for (int m{0}; m<100+k; m++) {
-       h1->Fill( EventParticles[m].GetParticleType());
-       h3->Fill( EventParticles[m]->theta);
-       h2->Fill( EventParticles[m]->phi);
-       h4->Fill( sqrt(EventParticles[m].GetPx()*EventParticles[m].GetPx()+EventParticles[m].GetPy()*EventParticles[m].GetPy()+EventParticles[m]GetPz()*EventParticles[m].GetPz()));
-       h5->Fill(sqrt(EventParticles[m].GetPx()*EventParticles[m].GetPx()+EventParticles[m].GetPy()*EventParticles[m].GetPy()));
-       h6->Fill(EventParticles[m].TotEnergy());
-       h7->Fill(EventParticles[m].InvMass());
+      for (int m{0}; m < 100 + k; m++) {
+        h1->Fill(EventParticles[m].GetParticleIndex());
 
+        h6->Fill(EventParticles[m].TotEnergy());
+        h7->Fill(EventParticles[m].InvMass(
+            EventParticles[m + 1]));  // chiuedere. tutte le combinazioni
+                                      // possibili? non sono troppe entrate???
+        if (Array[EventParticles[m].GetParticleIndex()]
+                ->ParticleType::GetCharge() !=
+            Array[EventParticles[m + 1].GetParticleIndex()]
+                ->ParticleType::GetCharge()) {
+          h8->Fill(EventParticles[m].InvMass(EventParticles[m + 1]));
+        } else {
+          h9->Fill(EventParticles[m].InvMass(EventParticles[m + 1]));
+        }
       }
     }
-
   }
-
 
   /*
   Particle::AddParticleType("Protone", 1, 2);
@@ -99,5 +115,5 @@ TH1F *h7 = new TH1F("Isto7","Massa invariante gen.",20,0., 11.);
   for (int i{0}; i < 2; i++) {
     array[i]->print();
   }
- (*array[1]).print();*/
+  (*array[1]).print();*/
 }
