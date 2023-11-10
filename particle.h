@@ -28,6 +28,7 @@ class Particle {
   double GetPy() const;
   double GetPz() const;
   double GetMass() const;
+  int GetCharge() const;
   double TotEnergy() const;
   double InvMass(Particle& p);
   void SetP(double px,double py,double pz);
