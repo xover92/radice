@@ -1,4 +1,3 @@
-
 #include "ParticleType.hpp"
 
 #include <iostream>

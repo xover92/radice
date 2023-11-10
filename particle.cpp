@@ -92,6 +92,9 @@ double Particle::GetPz() const { return fPz_; }
 
 double Particle::GetMass() const { return Array[fIndex]->GetMass(); }
 
+int Particle::GetCharge() const { return Array[fIndex]->GetCharge(); }
+
+
 double Particle::TotEnergy() const {
   double Energy = std::sqrt(std::pow(GetMass(), 2) + std::pow(GetPx(), 2) +
                             std::pow(GetPy(), 2) + std::pow(GetPz(), 2));
